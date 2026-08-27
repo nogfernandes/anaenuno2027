@@ -1,0 +1,3 @@
+import type { Metadata } from "next"; import { RsvpForm } from "@/components/rsvp-form";
+export const metadata:Metadata={title:'RSVP'};
+export default async function RsvpPage({searchParams}:{searchParams:Promise<{code?:string;lang?:string}>}){const p=await searchParams;const lang=p.lang==='en'?'en':'pt';return <main className="min-h-screen px-6 py-12 sm:py-20"><a href={`/?lang=${lang}`} className="eyebrow">← Ana & Nuno</a>{p.code?<RsvpForm code={p.code} lang={lang}/>:<div className="py-24 text-center"><h1 className="font-editorial text-6xl">{lang==='pt'?'Falta o código':'Invitation code needed'}</h1><a className="button mt-8" href={`/?lang=${lang}#rsvp`}>{lang==='pt'?'Introduzir código':'Enter code'}</a></div>}</main>}

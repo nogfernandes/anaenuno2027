@@ -1,0 +1,2 @@
+import { DataTable } from "@/components/admin/table"; import { createClient } from "@/lib/supabase/server";
+export default async function Playlist(){const s=await createClient();const {data}=await s.from('music_suggestions').select('song,artist,created_at').order('created_at',{ascending:false});return <><p className="eyebrow">Dance floor</p><h1 className="font-editorial my-6 text-6xl">Playlist</h1><DataTable headers={['Song','Artist','Suggested']} rows={(data??[]).map(x=>[x.song,x.artist,new Date(x.created_at).toLocaleDateString('pt-PT')])}/></>}

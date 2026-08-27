@@ -1,0 +1,2 @@
+import { DataTable } from "@/components/admin/table"; import { createClient } from "@/lib/supabase/server";
+export default async function Invitations(){const s=await createClient();const {data}=await s.from('invitations').select('code,language,max_guests,status').order('created_at',{ascending:false});return <><p className="eyebrow">Guest list</p><h1 className="font-editorial my-6 text-6xl">Invitations</h1><DataTable headers={['Code','Language','Maximum guests','Status']} rows={(data??[]).map(x=>[x.code,x.language,x.max_guests,x.status])}/></>}

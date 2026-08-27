@@ -1,0 +1,5 @@
+"use server";
+import { redirect } from "next/navigation"; import { revalidatePath } from "next/cache"; import { createClient } from "@/lib/supabase/server";
+export async function login(formData:FormData){const supabase=await createClient();const {error}=await supabase.auth.signInWithPassword({email:String(formData.get('email')||''),password:String(formData.get('password')||'')});if(error)redirect('/admin/login?error=1');redirect('/admin')}
+export async function logout(){const supabase=await createClient();await supabase.auth.signOut();redirect('/')}
+export async function saveSettings(formData:FormData){const supabase=await createClient();const {data:{user}}=await supabase.auth.getUser();if(!user)redirect('/admin/login');await supabase.from('wedding_settings').upsert({id:1,rsvp_open:formData.get('rsvp_open')==='on',rsvp_deadline:formData.get('rsvp_deadline'),show_faq:formData.get('show_faq')==='on',show_dress_code:formData.get('show_dress_code')==='on',show_playlist:formData.get('show_playlist')==='on',show_programme:formData.get('show_programme')==='on'});revalidatePath('/admin/settings')}
