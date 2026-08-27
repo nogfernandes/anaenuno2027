@@ -1,103 +1,11 @@
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-[#F4EFE7] text-[#5E4638]">
-      <section className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-        <div className="mb-10 text-sm uppercase tracking-[0.35em]">
-          Together, 24.04.2027
-        </div>
-
-        <h1 className="text-6xl font-light tracking-tight sm:text-8xl">
-          ANA
-          <span className="mx-4 text-[#B76E4D]">×</span>
-          NUNO
-        </h1>
-
-        <div className="mt-8 text-lg tracking-[0.3em] uppercase">
-          Lisboa
-        </div>
-
-        <div className="mt-16 flex flex-col gap-3 text-sm uppercase tracking-[0.25em] sm:flex-row sm:gap-8">
-          <a href="#rsvp" className="transition-opacity hover:opacity-50">
-            RSVP
-          </a>
-          <a href="#dress-code" className="transition-opacity hover:opacity-50">
-            Dress Code
-          </a>
-          <a href="#playlist" className="transition-opacity hover:opacity-50">
-            Playlist
-          </a>
-        </div>
-      </section>
-
-      <section
-        id="rsvp"
-        className="flex min-h-screen items-center justify-center bg-[#C96F4A] px-6 text-[#FFF9F3]"
-      >
-        <div className="max-w-xl text-center">
-          <p className="mb-6 text-sm uppercase tracking-[0.35em]">RSVP</p>
-          <h2 className="text-4xl font-light sm:text-6xl">
-            Introduz o teu código
-          </h2>
-
-          <div className="mt-10">
-            <input
-              type="text"
-              placeholder="ANA-NUNO-2027-X7K3"
-              className="w-full border-b border-[#FFF9F3] bg-transparent px-2 py-4 text-center text-lg outline-none placeholder:text-[#FFF9F3]/60"
-            />
-          </div>
-
-          <button className="mt-8 border border-[#FFF9F3] px-8 py-3 text-sm uppercase tracking-[0.25em] transition hover:bg-[#FFF9F3] hover:text-[#C96F4A]">
-            Continuar
-          </button>
-        </div>
-      </section>
-
-      <section
-        id="dress-code"
-        className="flex min-h-screen items-center justify-center px-6"
-      >
-        <div className="text-center">
-          <p className="mb-8 text-sm uppercase tracking-[0.35em]">Dress Code</p>
-          <h2 className="text-5xl font-light">Descontraído</h2>
-
-          <div className="mt-12 flex justify-center gap-4">
-            <div className="h-16 w-16 rounded-full bg-[#F4EFE7]" />
-            <div className="h-16 w-16 rounded-full bg-[#D8C4AA]" />
-            <div className="h-16 w-16 rounded-full bg-[#B76E4D]" />
-            <div className="h-16 w-16 rounded-full bg-[#8A5A44]" />
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="playlist"
-        className="flex min-h-screen items-center justify-center bg-[#8A5A44] px-6 text-[#FFF9F3]"
-      >
-        <div className="max-w-xl text-center">
-          <p className="mb-8 text-sm uppercase tracking-[0.35em]">Playlist</p>
-          <h2 className="text-4xl font-light sm:text-6xl">
-            Que música não pode faltar?
-          </h2>
-
-          <div className="mt-10 space-y-4">
-            <input
-              type="text"
-              placeholder="Música"
-              className="w-full border-b border-[#FFF9F3] bg-transparent px-2 py-4 text-center outline-none placeholder:text-[#FFF9F3]/60"
-            />
-            <input
-              type="text"
-              placeholder="Artista"
-              className="w-full border-b border-[#FFF9F3] bg-transparent px-2 py-4 text-center outline-none placeholder:text-[#FFF9F3]/60"
-            />
-          </div>
-
-          <button className="mt-8 border border-[#FFF9F3] px-8 py-3 text-sm uppercase tracking-[0.25em] transition hover:bg-[#FFF9F3] hover:text-[#8A5A44]">
-            Adicionar
-          </button>
-        </div>
-      </section>
-    </main>
-  );
-}
+import { Suspense } from "react"; import { Countdown } from "@/components/countdown"; import { LanguageSwitcher } from "@/components/language-switcher"; import { RsvpEntry } from "@/components/rsvp-entry"; import { copy } from "@/lib/content"; import type { Language } from "@/types";
+export default async function Home({searchParams}:{searchParams:Promise<{lang?:string}>}){const {lang:raw}=await searchParams;const lang:Language=raw==='en'?'en':'pt';const c=copy[lang];return <main>
+<header className="fixed inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 mix-blend-multiply sm:px-10"><a href="#top" className="font-editorial text-xl">A <span className="text-[#b65f41]">×</span> N</a><nav className="hidden gap-7 lg:flex">{c.nav.map(([n,h]:string[])=><a className="eyebrow hover:opacity-50" href={h} key={h}>{n}</a>)}</nav><Suspense><LanguageSwitcher label={c.language}/></Suspense></header>
+<section id="top" className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 text-center"><div className="absolute left-[8%] top-[18%] h-28 w-28 rounded-full border border-[#b65f41]/30 sm:h-48 sm:w-48"/><div className="absolute bottom-[12%] right-[5%] h-48 w-32 rotate-12 rounded-[50%] bg-[#d9c7ad]/45 sm:h-72 sm:w-48"/><div className="reveal relative"><p className="eyebrow">Together · {c.date}</p><h1 className="font-editorial my-8 text-[20vw] font-normal leading-[.72] tracking-[-.07em] sm:text-[12rem]">Ana<span className="mx-[.12em] text-[#b65f41]">&</span>Nuno</h1><p className="eyebrow">{c.city}</p><a href="#story" className="mt-16 inline-block text-2xl" aria-label="Scroll">↓</a></div></section>
+<section id="story" className="grid min-h-[80vh] place-items-center bg-[#392f29] px-6 py-28 text-[#f4efe7]"><div className="max-w-4xl text-center"><p className="eyebrow">01 · Nós</p><h2 className="font-editorial mt-10 text-5xl leading-tight sm:text-8xl">{c.intro}</h2></div></section>
+<section className="px-6 py-28 text-center sm:py-40"><p className="eyebrow">{c.countdown}</p><Countdown labels={[c.days,c.hours,c.minutes,c.seconds]}/></section>
+<section id="programme" className="grid bg-[#d9c7ad] px-6 py-28 sm:grid-cols-2 sm:px-16 sm:py-40"><div><p className="eyebrow">02 · {c.programme}</p><h2 className="font-editorial mt-8 text-6xl sm:text-8xl">24.04<br/>2027</h2></div><div className="mt-16 space-y-10 sm:mt-0"><div className="border-t border-current pt-4"><span className="eyebrow">14:30</span><h3 className="font-editorial mt-3 text-4xl">{c.ceremony}</h3><p className="mt-2 text-sm">Lisboa</p></div><div className="border-t border-current pt-4"><span className="eyebrow">17:00</span><h3 className="font-editorial mt-3 text-4xl">{c.dinner}</h3><p className="mt-2 text-sm">Até tarde · Until late</p></div></div></section>
+<section id="dress-code" className="grid min-h-[75vh] place-items-center px-6 py-28 text-center"><div className="max-w-2xl"><p className="eyebrow">03 · {c.dress}</p><h2 className="font-editorial mt-8 text-6xl sm:text-8xl">{c.dressTitle}</h2><p className="mx-auto mt-8 max-w-lg leading-7 opacity-75">{c.dressText}</p><div className="mt-12 flex justify-center gap-3">{['#ede4d5','#cbb89d','#b65f41','#7c5947','#5d6250'].map(x=><span key={x} className="h-11 w-11 rounded-full" style={{background:x}}/>)}</div></div></section>
+<section id="faq" className="bg-[#5d6250] px-6 py-28 text-[#fffaf3] sm:px-16"><div className="mx-auto max-w-5xl"><p className="eyebrow">04 · FAQ</p><h2 className="font-editorial my-10 text-6xl sm:text-8xl">{c.faq}</h2>{c.faqs.map(([q,a]:string[])=><details className="border-t border-white/35 py-6" key={q}><summary className="cursor-pointer list-none font-editorial text-3xl">{q}<span className="float-right">+</span></summary><p className="mt-4 max-w-xl text-sm leading-6 opacity-75">{a}</p></details>)}</div></section>
+<section id="rsvp" className="px-6 py-32 text-center sm:py-44"><p className="eyebrow">05 · RSVP</p><h2 className="font-editorial mt-8 text-6xl sm:text-8xl">{c.rsvp}</h2><p className="mt-5 text-sm opacity-70">{c.rsvpText}</p><RsvpEntry lang={lang}/></section>
+<footer className="bg-[#b65f41] px-6 py-20 text-center text-[#fffaf3]"><p className="font-editorial text-4xl sm:text-6xl">{c.footer}</p><p className="eyebrow mt-10">Ana & Nuno · 2027</p></footer></main>}

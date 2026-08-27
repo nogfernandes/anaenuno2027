@@ -1,0 +1,3 @@
+"use client";
+import { useEffect,useState } from "react"; import { weddingDate } from "@/lib/content";
+export function Countdown({labels}:{labels:string[]}){const calc=()=>{const d=Math.max(0,weddingDate.getTime()-Date.now());return [Math.floor(d/86400000),Math.floor(d/3600000)%24,Math.floor(d/60000)%60,Math.floor(d/1000)%60]};const [time,setTime]=useState(calc);useEffect(()=>{const id=setInterval(()=>setTime(calc()),1000);return()=>clearInterval(id)},[]);return <div className="mt-12 grid grid-cols-4 gap-3">{time.map((n,i)=><div key={labels[i]}><div className="font-editorial text-4xl sm:text-6xl">{String(n).padStart(2,'0')}</div><div className="mt-2 text-[9px] uppercase tracking-[.2em]">{labels[i]}</div></div>)}</div>}
