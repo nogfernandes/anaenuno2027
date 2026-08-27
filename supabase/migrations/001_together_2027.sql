@@ -1,10 +1,31 @@
 create extension if not exists pgcrypto;
 create table if not exists public.invitations (id uuid primary key default gen_random_uuid(), code text unique not null, language text not null default 'pt' check(language in('pt','en')), max_guests integer not null default 1 check(max_guests between 1 and 4), status text not null default 'active' check(status in('active','used','disabled')), created_at timestamptz not null default now());
+alter table public.invitations add column if not exists language text not null default 'pt' check(language in('pt','en'));
+alter table public.invitations add column if not exists max_guests integer not null default 1 check(max_guests between 1 and 4);
+alter table public.invitations add column if not exists status text not null default 'active' check(status in('active','used','disabled'));
+alter table public.invitations add column if not exists created_at timestamptz not null default now();
 create table if not exists public.guests (id uuid primary key default gen_random_uuid(), invitation_id uuid not null references public.invitations(id) on delete cascade, name text not null, category text not null default 'adult' check(category in('adult','child','baby')), attendance text not null default 'pending' check(attendance in('pending','accepted','declined')), dietary_restrictions text, notes text, updated_at timestamptz not null default now());
+alter table public.guests add column if not exists category text not null default 'adult' check(category in('adult','child','baby'));
+alter table public.guests add column if not exists attendance text not null default 'pending' check(attendance in('pending','accepted','declined'));
+alter table public.guests add column if not exists dietary_restrictions text;
+alter table public.guests add column if not exists notes text;
+alter table public.guests add column if not exists updated_at timestamptz not null default now();
 create table if not exists public.music_suggestions (id uuid primary key default gen_random_uuid(), invitation_id uuid references public.invitations(id) on delete set null, song text not null, artist text not null, created_at timestamptz not null default now());
+alter table public.music_suggestions add column if not exists invitation_id uuid references public.invitations(id) on delete set null;
+alter table public.music_suggestions add column if not exists song text;
+alter table public.music_suggestions add column if not exists artist text;
+alter table public.music_suggestions add column if not exists created_at timestamptz not null default now();
 create table if not exists public.messages (id uuid primary key default gen_random_uuid(), invitation_id uuid references public.invitations(id) on delete set null, message text not null check(char_length(message)<=500), created_at timestamptz not null default now());
 create table if not exists public.wedding_settings (id smallint primary key default 1 check(id=1), rsvp_open boolean not null default true, rsvp_deadline date not null default '2027-01-24', show_faq boolean not null default true, show_dress_code boolean not null default true, show_playlist boolean not null default true, show_programme boolean not null default true, updated_at timestamptz not null default now());
 insert into public.wedding_settings(id) values(1) on conflict do nothing;
+update public.invitations i set max_guests=least(4,g.guest_count) from (select invitation_id,count(*)::integer guest_count from public.guests group by invitation_id) g where i.id=g.invitation_id and i.max_guests<g.guest_count;
+do $$ begin
+  if exists(select 1 from information_schema.columns where table_schema='public' and table_name='guests' and column_name='confirmed' and data_type='boolean') then
+    execute 'update public.guests set attendance=case when confirmed then ''accepted'' when confirmed=false then ''declined'' else ''pending'' end where confirmed is not null';
+  elsif exists(select 1 from information_schema.columns where table_schema='public' and table_name='guests' and column_name='attending' and data_type='boolean') then
+    execute 'update public.guests set attendance=case when attending then ''accepted'' when attending=false then ''declined'' else ''pending'' end where attending is not null';
+  end if;
+end $$;
 alter table public.invitations enable row level security; alter table public.guests enable row level security; alter table public.music_suggestions enable row level security; alter table public.messages enable row level security; alter table public.wedding_settings enable row level security;
 create policy "admins invitations" on public.invitations for all to authenticated using(true) with check(true); create policy "admins guests" on public.guests for all to authenticated using(true) with check(true); create policy "admins music" on public.music_suggestions for all to authenticated using(true) with check(true); create policy "admins messages" on public.messages for all to authenticated using(true) with check(true); create policy "admins settings" on public.wedding_settings for all to authenticated using(true) with check(true);
 create policy "public settings" on public.wedding_settings for select to anon using(true);
