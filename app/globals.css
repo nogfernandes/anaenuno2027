@@ -5,10 +5,10 @@ html { scroll-behavior:smooth; scroll-padding-top:5rem; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 ::selection { background:var(--clay); color:#fffaf3; }
 .font-editorial { font-family:"Iowan Old Style","Baskerville",Georgia,serif; }
-.eyebrow { font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; font-weight:600; }
+.eyebrow { font-size:.875rem; letter-spacing:.28em; text-transform:uppercase; font-weight:600; }
 .field { width:100%; border:0; border-bottom:1px solid currentColor; background:transparent; padding:.85rem 0; outline:none; border-radius:0; }
 .field:focus { border-bottom-width:2px; }
-.button { display:inline-flex; min-height:3rem; align-items:center; justify-content:center; border:1px solid currentColor; padding:.75rem 1.4rem; font-size:.68rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; transition:.2s ease; }
+.button { display:inline-flex; min-height:3rem; align-items:center; justify-content:center; border:1px solid currentColor; padding:.75rem 1.4rem; font-size:.875rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; transition:.2s ease; }
 .button:hover { background:var(--ink); color:var(--paper); border-color:var(--ink); }
 .button:disabled { cursor:not-allowed; opacity:.45; }
 .reveal { animation:reveal .8s cubic-bezier(.2,.75,.2,1) both; }
