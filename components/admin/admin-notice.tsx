@@ -1,0 +1,5 @@
+"use client";
+import { useEffect,useState } from "react";
+import { usePathname,useSearchParams } from "next/navigation";
+
+export function AdminNotice(){const params=useSearchParams();const pathname=usePathname();const success=params.get('success');const error=params.get('error');const message=error??success;const noticeKey=params.get('notice')??message??'';const [dismissed,setDismissed]=useState('');useEffect(()=>{if(!message)return;const timer=window.setTimeout(()=>{setDismissed(noticeKey);window.history.replaceState({},'',pathname)},5000);return()=>window.clearTimeout(timer)},[message,noticeKey,pathname]);if(!message||dismissed===noticeKey)return null;return <div className={`fixed right-5 top-20 z-50 max-w-sm border px-5 py-4 text-sm shadow-lg ${error?'border-red-800/30 bg-[#fff4f1] text-red-900':'border-[#5d6250]/30 bg-[#f2f5ed] text-[#35402d]'}`} role={error?'alert':'status'}><div className="flex items-start gap-5"><p>{message}</p><button type="button" className="text-lg leading-none" onClick={()=>{setDismissed(noticeKey);window.history.replaceState({},'',pathname)}} aria-label="Dismiss notification">×</button></div></div>}
