@@ -14,3 +14,4 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui
 .reveal { animation:reveal .8s cubic-bezier(.2,.75,.2,1) both; }
 @keyframes reveal { from { opacity:0; transform:translateY(16px) } }
 @media (prefers-reduced-motion:reduce) { html{scroll-behavior:auto}.reveal{animation:none} }
+@media (max-width:639px) { .mobile-header .eyebrow{font-size:.7rem;letter-spacing:.16em} }
