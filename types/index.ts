@@ -6,5 +6,5 @@ export type QuestionType="short_text"|"long_text"|"single_choice"|"multiple_choi
 export interface QuestionOption { label_pt:string;label_en:string;value:string; }
 export interface RsvpQuestion { id:string;label_pt:string;label_en:string;help_pt:string|null;help_en:string|null;question_type:QuestionType;scope:"invitation"|"guest";options:QuestionOption[];required:boolean;position:number; }
 export interface RsvpAnswer { question_id:string;guest_id:string|null;answer:string|string[]|boolean; }
-export interface Invitation { id:string; code:string; language:Language; max_guests:number; status:"active"|"used"|"disabled"; guests:Guest[];questions:RsvpQuestion[];answers:RsvpAnswer[]; }
-export interface WeddingSettings { rsvp_open:boolean; rsvp_deadline:string; show_faq:boolean; show_dress_code:boolean; show_playlist:boolean; show_public_playlist:boolean; playlist_display_mode:'list'|'cloud'; show_programme:boolean; }
+export interface Invitation { id:string; code:string; language:Language; max_guests:number; status:"active"|"used"|"disabled"; event_type:"wedding"|"pre_event"; guests:Guest[];questions:RsvpQuestion[];answers:RsvpAnswer[]; }
+export interface WeddingSettings { rsvp_open:boolean; rsvp_deadline:string; pre_event_rsvp_open:boolean; pre_event_rsvp_deadline:string; show_pre_event:boolean; show_faq:boolean; show_dress_code:boolean; show_playlist:boolean; show_public_playlist:boolean; playlist_display_mode:'list'|'cloud'; show_programme:boolean; }
